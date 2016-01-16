@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/output.min.css" />
+        <title>Tally Counter</title>
+    </head>
+    <body data-ng-app="MCounter" layout="column">
+        <div layout="row">
+            <md-toolbar id="headerToolbar" md-scroll-shrink>
+                <div class="md-toolbar-tools">
+                    <div flex flex-gt-sm="90" flex-offset-gt-sm="5" flex-gt-md="50" flex-offset-gt-md="25" layout-padding>
+                        <h2>
+                            <span>Tally Counter</span>
+                        </h2>
+                    </div>
+                </div>
+            </md-toolbar>
+        </div>
+        <div layout="row" flex ng-controller="CntrController">
+            <div flex flex-gt-sm="90" flex-offset-gt-sm="5" flex-gt-md="50" flex-offset-gt-md="25">
+                <form name="newCntr" ng-submit="newCounter(newCntrDes)" novalidate>
+                    <div layout="row" layout-margin layout-wrap>
+                        <div layout="column" flex="60" flex-gt-sm="100">
+                            <md-input-container>
+                                <label>Description</label>
+                                <input type="text" placeholder="Write a new counter name" data-ng-model="newCntrDes" ng-required="true">
+                            </md-input-container>
+                        </div>
+                        <div layout="column" flex layout-align="start center" layout-align-gt-sm="start end">
+                            <md-button aria-label="Add new counter" class="md-primary md-raised md-primary md-hue-1" type="submit">
+                                <md-icon md-font-icon="fa fa-plus fa-lg"></md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                </form>
+                <md-divider></md-divider>
+                <div layout="row" layout-padding layout-xs="column" layout-sm="column">
+                    <div>
+                        Order By:
+                    </div>
+                    <div flex>
+                        <div layout="column">
+                            <md-radio-group ng-model="orderSelected" layout="row" class="md-primary">
+                                <md-radio-button aria-label="Default"value="default">Default</md-radio-button>
+                                <md-radio-button aria-label="Name" value="desc">Name</md-radio-button>
+                                <md-radio-button aria-label="Number" value="index">Number</md-radio-button>
+                            </md-radio-group>
+                        </div>
+                    </div>
+                    <div flex>
+                                <span>
+                                    Reverse:
+                                </span><p class="hide-gt-sm"></p>
+                        <md-checkbox aria-label="Reverse counters order" class="md-primary" ng-model="invertir"></md-checkbox>
+                    </div>
+                </div>
+                <md-divider></md-divider>
+                <div flex layout="row" layout-wrap layout-align="center start" layout-padding>
+                    <div flex-xs="100" flex-gt-xs="30" data-ng-repeat="contador in contadores | orderBy:orderSelected:invertir" layout-align="start center">
+                        <md-card ng-show="!contador.editingMode" layout-align="start center">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <span class="md-headline">{{contador.desc}}</span>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-content>
+                                <p class="md-display-1">{{contador.index}}</p>
+                            </md-card-content>
+                            <md-card-actions>
+                                <md-button aria-label="subtract" class="md-fab md-mini md-warn" ng-click="subtract(contador)">
+                                    <md-icon md-font-icon="fa fa-minus fa-lg"></md-icon>
+                                </md-button>
+                                <md-button aria-label="add" class="md-fab md-mini md-primary md-hue-1" ng-click="add(contador)">
+                                    <md-icon md-font-icon="fa fa-plus fa-lg"></md-icon>
+                                </md-button>
+                                <md-menu id="floatingMenu" md-offset="0 -7">
+                                    <md-button aria-label="Counter options" class="md-fab md-mini md-raised md-primary md-hue-2" ng-click="$mdOpenMenu($event)">
+                                        <md-icon md-font-icon="fa fa-caret-down fa-lg"></md-icon>
+                                    </md-button>
+                                    <md-menu-content width="2">
+                                        <md-menu-item>
+                                            <md-button ng-click="contador.editingMode = !contador.editingMode">Editar</md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="resetCntr(contador)">Restablecer</md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="removeCntr(contador)">Borrar</md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                            </md-card-actions>
+                        </md-card>
+                        <md-card ng-show="contador.editingMode"  layout-align="start center">
+                            <md-card-title>
+                                <md-card-title-text>
+                                    <md-input-container>
+                                        <input type="text" data-ng-model="contador.desc" ng-required="true">
+                                    </md-input-container>
+                                </md-card-title-text>
+                            </md-card-title>
+                            <md-card-content>
+                                <md-input-container>
+                                    <input type="number" data-ng-model="contador.index" ng-required="true">
+                                </md-input-container>
+                            </md-card-content>
+                            <md-card-actions>
+                                <md-button aria-label="subtract" class="md-fab md-mini md-primary" ng-click="contador.editingMode = !contador.editingMode">
+                                    <md-icon md-font-icon="fa fa-check fa-lg"></md-icon>
+                                </md-button>
+                            </md-card-actions>
+                        </md-card>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/output.min.js"></script>
+    </body>
+</html>
